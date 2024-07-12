@@ -1,0 +1,48 @@
+/* Container for the component */
+div {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Heading styles */
+  h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  /* Table styling */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 16px;
+    text-align: left;
+  }
+  
+  /* Table header styles */
+  thead {
+    background-color: #f4f4f4;
+  }
+  
+  th {
+    padding: 12px 15px;
+    border-bottom: 2px solid #ddd;
+    color: #555;
+  }
+  
+  /* Table data styles */
+  tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  /* Table row hover effect */
+  tbody tr:hover {
+    background-color: #f1f1f1;
+  }
+  

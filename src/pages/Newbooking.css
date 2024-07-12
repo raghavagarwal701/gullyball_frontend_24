@@ -1,0 +1,103 @@
+/* Add a general style for the container */
+div {
+  font-family: Arial, sans-serif;
+  margin: 0px;
+  padding: 5px;
+}
+
+/* Style for the headings */
+h2 {
+  color: #333;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Style for the form elements */
+label {
+  display: block;
+  font-weight: bold;
+  margin: 10px 0 5px;
+  text-align: center;
+}
+
+/* Style for the select and input elements */
+select,
+input[type="datetime-local"],
+input[type="checkbox"] {
+  width: 30%;
+  padding: 8px;
+  text-align: center;
+  margin: 5px auto 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  display: block;
+}
+
+/* Style for the select element when disabled */
+select:disabled {
+  background-color: #f9f9f9;
+  cursor: not-allowed;
+}
+
+/* Style for the option elements */
+option {
+  padding: 10px;
+}
+
+/* Style for the information paragraphs */
+p {
+  font-size: 16px;
+  color: #555;
+  margin: 10px 0;
+  text-align: center;
+}
+
+/* Additional styling for buttons */
+button {
+  background-color: #529c5c;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  display: block;
+  margin: 10px auto;
+  transition: background-color 0.3s ease;
+}
+
+button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+  color: #666666;
+}
+
+button:hover:enabled {
+  background-color: #3a7d45;
+}
+
+
+/* button:hover {
+  background-color: #0056b3;
+} */
+
+/* Styling for the wallet balance container */
+.wallet-balance-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px auto;
+}
+
+.wallet-balance-container label {
+  margin: 0;
+  margin-right: 10px;
+  text-align: left;
+  width: auto;
+}
+
+.wallet-balance-container input[type="checkbox"] {
+  width: auto;
+  margin: 0;
+}
