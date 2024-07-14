@@ -45,14 +45,7 @@ export default function Newbooking() {
     }
   }, [user, navigate]);
 
-//   useEffect(() => {
-//     //selecting local time for initial value
-//     const now = new Date();
-//     const istOffset = 5.5 * 60 * 60 * 1000; // 5 hours 30 minutes in milliseconds
-//     const istDate = new Date(now.getTime() + istOffset);
-//     const formattedIST = istDate.toISOString().slice(0, 16);
-//     setSelectedDateTime(formattedIST);
-//   }, []);
+
 
   //getting the base prise from arena id
   useEffect(() => {
@@ -70,7 +63,6 @@ export default function Newbooking() {
 
   useEffect(() =>{
     if(selectedArena && selectedDateTime && selectedFormat){
-        // console.log(selectedArena, selectedDateTime, selectedFormat)
         axios
             .post("/checkslot", {arena_id: selectedArena, start_time: selectedDateTime, format: selectedFormat})
             .then((responce) =>{
