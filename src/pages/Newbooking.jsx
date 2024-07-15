@@ -14,8 +14,8 @@ export default function Newbooking() {
   const [selectedArena, setSelectedArena] = useState(""); // State for selected arena
   const [selectedFormat, setSelectedFormat] = useState(""); // State for selected format
   const [selectedDateTime, setSelectedDateTime] = useState(""); // State for selected date and time
-  const [Baseprise, setBaseprise] = useState("");
-  const [Walletbalance, setWalletbalance] = useState("");
+  const [Baseprise, setBaseprise] = useState(""); //state for base prise
+  const [Walletbalance, setWalletbalance] = useState(""); //state for wallet balance
   const [useWalletBalance, setUseWalletBalance] = useState(false); // State for using wallet balance
   const [Available_slot, setAvailable_slot] = useState(false);
 
@@ -45,8 +45,6 @@ export default function Newbooking() {
     }
   }, [user, navigate]);
 
-
-
   //getting the base prise from arena id
   useEffect(() => {
     if (selectedArena && selectedFormat) {
@@ -57,21 +55,26 @@ export default function Newbooking() {
       const temp1 = Initial_data?.format?.filter(
         (format) => format.gt_id === Number(selectedFormat)
       );
-      setBaseprise(temp[0].base_price*temp1[0].duration/3600);
+      setBaseprise((temp[0].base_price * temp1[0].duration) / 3600);
     }
   }, [selectedArena, Initial_data, selectedFormat]);
 
-  useEffect(() =>{
-    if(selectedArena && selectedDateTime && selectedFormat){
-        axios
-            .post("/checkslot", {arena_id: selectedArena, start_time: selectedDateTime, format: selectedFormat})
-            .then((responce) =>{
-                if(responce.data.errmessage)toast.error(responce.data.errmessage);
-                else toast.success(responce.data.message);
-                setAvailable_slot(responce.data.isavailable);
-            })
+  //checking slot availality
+  useEffect(() => {
+    if (selectedArena && selectedDateTime && selectedFormat) {
+      axios
+        .post("/checkslot", {
+          arena_id: selectedArena,
+          start_time: selectedDateTime,
+          format: selectedFormat,
+        })
+        .then((responce) => {
+          if (responce.data.errmessage) toast.error(responce.data.errmessage);
+          else toast.success(responce.data.message);
+          setAvailable_slot(responce.data.isavailable);
+        });
     }
-  })
+  });
 
   // Get unique cities from the arena data
   const cities = Initial_data?.arena
@@ -86,6 +89,40 @@ export default function Newbooking() {
   // Get current date and time in proper format for datetime-local input
   const now = new Date();
   const nowFormatted = now.toISOString().slice(0, 16);
+
+  // Function to handle payment
+  const handlePayment = () => {
+    console.log(
+      user.player_id,
+      0.25 * Baseprise,
+      selectedDateTime,
+      selectedArena,
+      selectedFormat
+    );
+    if (useWalletBalance) {
+      if (Walletbalance >= 0.25 * Baseprise) {
+        axios
+          .post("./newbookingfromwallet", {
+            player_id: user.player_id,
+            booking_price: 0.25 * Baseprise,
+            booking_time: selectedDateTime,
+            arena_id: selectedArena,
+            format: selectedFormat,
+          })
+          .then((responce) => {
+            console.log(responce);
+          });
+          axios
+          .post("/walletbalance", { player_id: user.player_id })
+          .then((response) => {
+            setWalletbalance(response.data[0].balance);
+          })
+          .catch((error) => {
+            console.error("Error fetching wallet balance:", error);
+          });
+      }
+    }
+  };
 
   if (user === null) {
     return null;
@@ -162,7 +199,9 @@ export default function Newbooking() {
 
       <div>
         {Baseprise !== null && (
-          <p>The Advance Booking Fees (non-refundable) is: ₹{0.25 * Baseprise}/-</p>
+          <p>
+            The Advance Booking Fees (non-refundable) is: ₹{0.25 * Baseprise}/-
+          </p>
         )}
       </div>
       <div>
@@ -189,8 +228,7 @@ export default function Newbooking() {
 
       {/* Button for making payment */}
       <div>
-        <button onClick={() => { /* Add your payment logic here */ }}
-            disabled={!Available_slot}>
+        <button onClick={handlePayment} disabled={!Available_slot}>
           Make Payment
         </button>
       </div>
