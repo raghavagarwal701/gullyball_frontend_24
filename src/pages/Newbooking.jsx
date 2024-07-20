@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import "./Newbooking.css";
 
+
 export default function Newbooking() {
   const { user } = useContext(UserContext); // Taking user data from token
   const navigate = useNavigate(); // Importing navigation
@@ -18,6 +19,20 @@ export default function Newbooking() {
   const [Walletbalance, setWalletbalance] = useState(""); //state for wallet balance
   const [useWalletBalance, setUseWalletBalance] = useState(false); // State for using wallet balance
   const [Available_slot, setAvailable_slot] = useState(false);
+
+  useEffect(() => {
+    const loadRazorpay = () => {
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      script.async = true;
+      script.onload = () => {
+        console.log('Razorpay SDK loaded');
+      };
+      document.body.appendChild(script);
+    };
+    loadRazorpay();
+  }, []);
+
 
   useEffect(() => {
     if (user === null) {
@@ -91,17 +106,10 @@ export default function Newbooking() {
   const nowFormatted = now.toISOString().slice(0, 16);
 
   // Function to handle payment
-  const handlePayment = () => {
-    console.log(
-      user.player_id,
-      0.25 * Baseprise,
-      selectedDateTime,
-      selectedArena,
-      selectedFormat
-    );
+  const handlePayment = async () => {
     if (useWalletBalance) {
       if (Walletbalance >= 0.25 * Baseprise) {
-        axios
+        await axios
           .post("./newbookingfromwallet", {
             player_id: user.player_id,
             booking_price: 0.25 * Baseprise,
@@ -111,8 +119,11 @@ export default function Newbooking() {
           })
           .then((responce) => {
             console.log(responce);
+          })
+          .catch((error) => {
+            console.error("Error fetching wallet balance:", error);
           });
-          axios
+        axios
           .post("/walletbalance", { player_id: user.player_id })
           .then((response) => {
             setWalletbalance(response.data[0].balance);
@@ -120,7 +131,21 @@ export default function Newbooking() {
           .catch((error) => {
             console.error("Error fetching wallet balance:", error);
           });
+      }else{
+        toast.error("Insufficinet Wallet Balance")
       }
+    }
+    else{
+      const razoroptions = await axios.post("./createorderrazor", {
+        amount: 25*Baseprise,
+        player_id: user.player_id
+      })
+      .catch((error) =>{
+        console.error("Error getting razore pay order")
+      })
+      // console.log(razoroptions.data);
+      const rzp1 = new window.Razorpay(razoroptions.data);
+      rzp1.open();
     }
   };
 
@@ -131,7 +156,6 @@ export default function Newbooking() {
   return (
     <div>
       <h2>New Booking</h2>
-
       {/* This is for selecting city*/}
       <div>
         <label htmlFor="city">Select City:</label>

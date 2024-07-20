@@ -5,24 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import "./Mybooking.css"
 
-// const gameFormats = {
-//   100001: '2 vs 2 limited',
-//   100002: '2 vs 2 limited',
-//   100003: '2 vs 2 limited',
-//   100004: '1 hours',
-//   100005: '2 hours',
-//   100006: '30 minutes',
-//   // Add other game format mappings here
-// };
-
-// const arenas = {
-//   24401: 'RamGanga V MBD, Moradabad',
-//   24402: 'Kanshi MBD, Moradabad',
-//   20101: 'The Box Sec 11, Noida',
-//   1: 'Gully Arena, Gurgaon',
-//   // Add other arena mappings here
-// };
-
 export default function MyBooking() {
   const { user } = useContext(UserContext);
   const navigate = useNavigate(); 
