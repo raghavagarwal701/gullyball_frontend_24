@@ -138,12 +138,39 @@ export default function Newbooking() {
     else{
       const razoroptions = await axios.post("./createorderrazor", {
         amount: 25*Baseprise,
-        player_id: user.player_id
+        player_name: user.name,
       })
       .catch((error) =>{
         console.error("Error getting razore pay order")
       })
-      // console.log(razoroptions.data);
+
+      razoroptions.data.handler = function (response) {
+        const paymentData = {
+          order_id: response.razorpay_order_id,
+          payment_id: response.razorpay_payment_id,
+          signature: response.razorpay_signature,
+        };
+  
+        console.log(paymentData);
+
+        axios
+          .post("./newbookingfromrazor", {
+            player_id: user.player_id,
+            booking_price: 0.25 * Baseprise,
+            booking_time: selectedDateTime,
+            arena_id: selectedArena,
+            format: selectedFormat,
+            paymentData: paymentData
+          })
+          .then((responce) => {
+            console.log(responce);
+          })
+          .catch((error) => {
+            console.error("Error fetching wallet balance:", error);
+          });
+
+      };
+  
       const rzp1 = new window.Razorpay(razoroptions.data);
       rzp1.open();
     }

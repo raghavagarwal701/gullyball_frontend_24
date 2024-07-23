@@ -42,6 +42,7 @@ export default function Allbooking() {
   // Prevent rendering if user is not logged in
 
   // Format timestamp to readable date
+
   const formatDate = (timestamp) => {
     const date = new Date(timestamp * 1000);
     return date.toLocaleDateString();
@@ -73,6 +74,7 @@ export default function Allbooking() {
                 <th>End Time</th>
                 <th>Booker Name</th>
                 <th>Booker Number</th>
+                <th>OTP</th>
               </tr>
             </thead>
             <tbody>
@@ -89,6 +91,7 @@ export default function Allbooking() {
                     <td>{formatTime(booking.end_time)}</td>
                     <td>{booking.name}</td>
                     <td>{booking.phone_number}</td>
+                    <td>{booking.one_time_password}</td>
                   </tr>
                 ))
               ) : (
